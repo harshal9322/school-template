@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modern School Website</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 text-gray-900 overflow-x-hidden">
 
@@ -20,6 +25,7 @@
           <a href="#about" class="hover:text-blue-600">About</a>
           <a href="#teachers" class="hover:text-blue-600">Teachers</a>
           <a href="#facilities" class="hover:text-blue-600">Facilities</a>
+          <a href="#goals" class="hover:text-blue-600">Goals</a>
           <a href="#gallery" class="hover:text-blue-600">Gallery</a>
         </nav>
 
@@ -41,6 +47,7 @@
       <a href="#about" class="block hover:text-blue-600">About</a>
       <a href="#teachers" class="block hover:text-blue-600">Teachers</a>
       <a href="#facilities" class="block hover:text-blue-600">Facilities</a>
+      <a href="#goals" class="block hover:text-blue-600">Goals</a>
       <a href="#gallery" class="block hover:text-blue-600">Gallery</a>
     </div>
   </header>
@@ -101,7 +108,30 @@
     </div>
   </section>
 
-  <!-- Gallery -->
+  <!-- Goals / Counter Section (moved ABOVE Gallery) -->
+  <section id="goals" class="w-full py-20 px-4 sm:px-6 max-w-screen-xl mx-auto text-center bg-blue-600 text-white">
+    <h2 class="text-3xl font-bold mb-10">Our Goals</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+      <div>
+        <h3 class="text-5xl font-bold counter" data-target="500">0</h3>
+        <p class="mt-2">Students Enrolled</p>
+      </div>
+      <div>
+        <h3 class="text-5xl font-bold counter" data-target="50">0</h3>
+        <p class="mt-2">Teachers</p>
+      </div>
+      <div>
+        <h3 class="text-5xl font-bold counter" data-target="30">0</h3>
+        <p class="mt-2">Awards</p>
+      </div>
+      <div>
+        <h3 class="text-5xl font-bold counter" data-target="20">0</h3>
+        <p class="mt-2">Years of Excellence</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery (now after Goals) -->
   <section id="gallery" class="w-full py-20 px-4 sm:px-6 max-w-screen-xl mx-auto text-center">
     <h2 class="text-3xl font-bold mb-10">Gallery</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -119,12 +149,47 @@
     <p>&copy; 2025 MySchool. All rights reserved.</p>
   </footer>
 
-  <!-- Mobile Menu Script -->
+  <!-- Scripts -->
   <script>
+    // Mobile Menu
     const menuBtn = document.getElementById("menu-btn");
     const menu = document.getElementById("menu");
     menuBtn.addEventListener("click", () => {
       menu.classList.toggle("hidden");
+    });
+
+    // Counter Animation on Scroll
+    const counters = document.querySelectorAll('.counter');
+    let counterStarted = false;
+
+    function runCounters() {
+      if (counterStarted) return;
+      counters.forEach(counter => {
+        const updateCount = () => {
+          const target = +counter.getAttribute('data-target');
+          const count = +counter.innerText;
+          const speed = 150; // smaller = slower
+          const increment = Math.ceil(target / speed);
+
+          if (count < target) {
+            counter.innerText = count + increment;
+            setTimeout(updateCount, 60);
+          } else {
+            counter.innerText = target;
+          }
+        };
+        updateCount();
+      });
+      counterStarted = true;
+    }
+
+    // Detect when Goals section is visible
+    const goalsSection = document.getElementById('goals');
+    window.addEventListener('scroll', () => {
+      const sectionTop = goalsSection.offsetTop - window.innerHeight + 100;
+      if (window.scrollY > sectionTop) {
+        runCounters();
+      }
     });
   </script>
 </body>
